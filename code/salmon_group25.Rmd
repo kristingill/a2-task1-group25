@@ -45,7 +45,7 @@ fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
 - Remember: All code that you used to wrangle the data and prepare the graphs should be available to see if we click on the Code buttons. 
 
 ## Time Series
-```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in red, Jack Coho is indicated in green, and Steelhead is indicated in blue. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in green, Jack Coho is indicated in yellow, and Steelhead is indicated in purple. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 tab_1 <- fish_passage %>% 
   select(species, date_new, counts) %>% 
   mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% 
@@ -62,7 +62,9 @@ ggplot(data = tab_1, aes(x = date_new,
   #facet_wrap(~species, scales = "free_y") +
   labs(x = "Time (years)",
        y = "Number of Salmon",
-       title = "Coho, Jack Coho, and Steelhead Ladder Passage - Willamette River, Oregon")
+       title = "Coho, Jack Coho, and Steelhead Ladder Passage - Willamette River, Oregon") +
+  theme_classic() +
+  scale_color_manual(values = c("#238A8DFF", "95D8F0FF", "#440154FF"))
 ```
 - Fish passage tends to be higher for Steelhead and Coho.
 - Fish passage varies seasonally for each species. Steelhead tend to pass through earlier in the year than Coho and Steelhead.

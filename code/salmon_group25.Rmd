@@ -22,13 +22,14 @@ library(lubridate)
 # reading in the data
 fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
   clean_names() %>% 
-  mutate(date_new = mdy(date))
+  mutate(date_new = mdy(date)) %>% 
+  pivot_longer(cols = 3:15, names_to = "species", values_to = "counts")
 ```
 
 # Overview {.tabset}
 - An engaging image (with caption, including photo credit) that is relevant to the data set
 
-- A brief summary (3 - 4 sentences) of the dataset, and what is included in this “report”
+- A brief summary (3 - 4 sentences) of the data set, and what is included in this “report”
 
 - A map of the fish ladder location (you can make this in R on your own, or include an existing map appropriately licensed, with attribution)
 
@@ -36,14 +37,20 @@ fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
 
 - Remember: All code that you used to wrangle the data and prepare the graphs should be available to see if we click on the Code buttons. 
 
-## Tab 1
-- A finalized, static graph of adult passage for coho, jack coho, and steelhead salmon (you decide if these all occupy the same panel, or if they are in separate panels). Add a figure caption. Replace NA values with zero. 
-
-- 2 - 3 bulletpoints summarizing major patterns / notable trends in the salmon passage time series data
+## Time Series
+- 2 - 3 bullet points summarizing major patterns / notable trends in the salmon passage time series data
 
 ```{r}
 tab_1 <- fish_passage %>% 
-  select(coho, jack_coho, steelhead, date_new, project, temp_c)
+  filter(species == c("coho", "jack_coho", "steelhead")) %>% 
+  select(species, date_new, counts) %>% 
+  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% 
+  mutate(year = year(date_new))
+
+ggplot(data = tab_1, aes(x = year,
+                         y = counts)) +
+  geom_line(aes(color = species)) +
+  facet_wrap(~species)
 ```
 
 ## Tab 2

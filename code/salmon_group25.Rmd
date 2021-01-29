@@ -17,14 +17,20 @@ library(janitor)
 library(here)
 library(lubridate)
 library(tsibble)
+library(feasts)
+library(viridis)
 ```
 
 ```{r}
 # reading in the data
 fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
   clean_names() %>% 
+  pivot_longer(cols = 3:15, names_to = "species", values_to = "counts")  %>% 
   mutate(date_new = mdy(date)) %>% 
-  pivot_longer(cols = 3:15, names_to = "species", values_to = "counts")
+  filter(species %in% c("coho", "jack_coho", "steelhead")) %>% 
+  as_tsibble(key = species, 
+             index = date_new)
+
 ```
 
 # Overview {.tabset}
@@ -41,11 +47,9 @@ fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
 ## Time Series
 ```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in red, Jack Coho is indicated in green, and Steelhead is indicated in blue. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 tab_1 <- fish_passage %>% 
-  filter(species == c("coho", "jack_coho", "steelhead")) %>% 
   select(species, date_new, counts) %>% 
   mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% 
   mutate(year = year(date_new)) %>% 
-  as_tsibble(key = species, index = date_new) %>% 
   mutate(species = case_when(
     species == "coho" ~ "Coho",
     species == "jack_coho" ~ "Jack Coho",
@@ -64,5 +68,27 @@ ggplot(data = tab_1, aes(x = date_new,
 - Fish passage varies seasonally for each species. Steelhead tend to pass through earlier in the year than Coho and Steelhead.
 - Coho passage shows a marked increase in 2009 and 2010.
 
-## Tab 2
-## Tab 3
+## Season Plots
+
+```{r, warning = FALSE, message = FALSE, fig.cap="**Figure 2:** Coho, Jack Coho, and Steelhead abundance through time on the Willamette River, Oregon, for 2001-2010. Each line represents a different year. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+# create seasonplots for each species
+fish_passage %>% 
+  mutate(species = case_when(
+    species == "coho" ~ "Coho",
+    species == "jack_coho" ~ "Jack Coho",
+    species == "steelhead" ~ "Steelhead"
+  )) %>% 
+  gg_season(y = counts,
+            pal = scales::viridis_pal()(9)) +
+  facet_wrap("species") +
+  ylab("Fish counts") +
+  xlab("Date") +
+  theme_classic()
+  
+
+```
+- Coho and Jack Coho abundances peak around October with sightings dropping off within a few months away from October in either direction. In contrast, Steelheads were counted throughout the year and their abundance peaks in the spring/summer, rather than during the fall.
+- Jack Coho appear to be the least abundant of the three fishes, Coho have the largest abundance peak, and Steelheads appear to have the largest total abundance as well as the most consistent presence throughout the year.
+- Coho and Jack Coho abundances appear to be increasing in time (highest peaks are later years), whereas Steelhead abundances may be decreasing (top peaks are earlier years).
+
+## Annual totals

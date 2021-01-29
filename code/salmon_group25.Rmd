@@ -1,11 +1,68 @@
 ---
-title: "salmon_group25"
-author: "Kristin Gill"
-date: "1/28/2021"
-output: html_document
+title: "Willamette Falls Fish Passage"
+author: "Kristin Gill, Julianna Renzi, AJ Zekanoski"
+date: "2/09/2021"
+output: 
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(lubridate)
+library(tsibble)
 ```
 
+```{r}
+# reading in the data
+fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
+  clean_names() %>% 
+  mutate(date_new = mdy(date)) %>% 
+  pivot_longer(cols = 3:15, names_to = "species", values_to = "counts")
+```
+
+# Overview {.tabset}
+- An engaging image (with caption, including photo credit) that is relevant to the data set
+
+- A brief summary (3 - 4 sentences) of the data set, and what is included in this “report”
+
+- A map of the fish ladder location (you can make this in R on your own, or include an existing map appropriately licensed, with attribution)
+
+- A professionally formatted data citation
+
+- Remember: All code that you used to wrangle the data and prepare the graphs should be available to see if we click on the Code buttons. 
+
+## Time Series
+```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in red, Jack Coho is indicated in green, and Steelhead is indicated in blue. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+tab_1 <- fish_passage %>% 
+  filter(species == c("coho", "jack_coho", "steelhead")) %>% 
+  select(species, date_new, counts) %>% 
+  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% 
+  mutate(year = year(date_new)) %>% 
+  as_tsibble(key = species, index = date_new) %>% 
+  mutate(species = case_when(
+    species == "coho" ~ "Coho",
+    species == "jack_coho" ~ "Jack Coho",
+    species == "steelhead" ~ "Steelhead"
+  ))
+
+ggplot(data = tab_1, aes(x = date_new,
+                         y = counts)) +
+  geom_line(aes(color = species)) +
+  #facet_wrap(~species, scales = "free_y") +
+  labs(x = "Time (years)",
+       y = "Number of Salmon",
+       title = "Coho, Jack Coho, and Steelhead Ladder Passage - Willamette River, Oregon")
+```
+- Fish passage tends to be higher for Steelhead and Coho.
+- Fish passage varies seasonally for each species. Steelhead tend to pass through earlier in the year than Coho and Steelhead.
+- Coho passage shows a marked increase in 2009 and 2010.
+
+## Tab 2
+## Tab 3

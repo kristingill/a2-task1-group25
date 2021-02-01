@@ -21,7 +21,7 @@ library(feasts)
 library(viridis)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # reading in the data
 fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
   clean_names() %>% 
@@ -34,16 +34,22 @@ fish_passage <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
 ```
 
 # Overview {.tabset}
-- An engaging image (with caption, including photo credit) that is relevant to the data set
 
-- A brief summary (3 - 4 sentences) of the data set, and what is included in this “report”
+This dataset shows the number of fishes that have passed through the Willamette Falls Fish Ladder on the Willamette River in Oregon. Counts are taken from video recordings of the ladder every day, 24 hours/day, with only short breaks in data collection in 2005, 2008, and 2010 (11/29/2005-12/1/2005, 12/6/2005-12/8/2005, 12/13/2005-12/14/2005, 8/26/2008-9/21/2008, 8/23/2010-8/27/2010). In this report we examine patterns of Coho, Jack Coho, and Steelhead abundance through time at the Willamette Fish Ladder. 
 
-- A map of the fish ladder location (you can make this in R on your own, or include an existing map appropriately licensed, with attribution)
+We first examine the full time series (first tab) to look for general trends in the data, then we divided the data up by year to see how fish abundance varies seasonally and by year (second tab), and finally we look at annual counts by species (third tab) to see how abundances are changing through time.
 
-- A professionally formatted data citation
 
-- Remember: All code that you used to wrangle the data and prepare the graphs should be available to see if we click on the Code buttons. 
+**Data source: ** 
 
+Columbia Basin Research. DART Adult Passage Daily Counts For All Species for WFF-Willamette Falls. Dates: 2001-01-01 to 2010-12-31. Accessed: 2021-01-29. School of Aquatic & Fishery Sciences, University of Washington. URL: http://www.cbr.washington.edu/dart/query/adult_graph_text 
+
+![Photograph of the Willamette Falls Fish Ladder. Photo credit: Yancy Lind](../wilamette_falls_fish_ladder.jpg)
+
+
+![Map of the Willamette Falls Fish Ladder. Photo credit: U.S. Army Corps of Engineers](../Willamette_Falls__map.jpg)
+
+# Data Visualizations {.tabset}
 ## Time Series
 ```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in green, Jack Coho is indicated in yellow, and Steelhead is indicated in purple. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 tab_1 <- fish_passage %>% 
@@ -86,8 +92,6 @@ fish_passage %>%
   ylab("Fish counts") +
   xlab("Date") +
   theme_classic()
-  
-
 ```
 - Coho and Jack Coho abundances peak around October with sightings dropping off within a few months away from October in either direction. In contrast, Steelheads were counted throughout the year and their abundance peaks in the spring/summer, rather than during the fall.
 - Jack Coho appear to be the least abundant of the three fishes, Coho have the largest abundance peak, and Steelheads appear to have the largest total abundance as well as the most consistent presence throughout the year.

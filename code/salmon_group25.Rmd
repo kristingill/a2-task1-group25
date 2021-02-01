@@ -86,8 +86,6 @@ fish_passage %>%
   ylab("Fish counts") +
   xlab("Date") +
   theme_classic()
-  
-
 ```
 - Coho and Jack Coho abundances peak around October with sightings dropping off within a few months away from October in either direction. In contrast, Steelheads were counted throughout the year and their abundance peaks in the spring/summer, rather than during the fall.
 - Jack Coho appear to be the least abundant of the three fishes, Coho have the largest abundance peak, and Steelheads appear to have the largest total abundance as well as the most consistent presence throughout the year.

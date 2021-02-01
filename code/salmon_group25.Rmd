@@ -49,6 +49,7 @@ Columbia Basin Research. DART Adult Passage Daily Counts For All Species for WFF
 
 ![Map of the Willamette Falls Fish Ladder. Photo credit: U.S. Army Corps of Engineers](../Willamette_Falls__map.jpg)
 
+# Data Visualizations {.tabset}
 ## Time Series
 ```{r, fig.cap="**Figure 1:** Coho, Jack Coho, and Steelhead passage through the Willamette Falls fish ladder on the Willamette River, Oregon, starting in 2001 and through 2010. Coho is indicated in red, Jack Coho is indicated in green, and Steelhead is indicated in blue. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 tab_1 <- fish_passage %>% 

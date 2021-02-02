@@ -93,4 +93,37 @@ fish_passage %>%
 - Jack Coho appear to be the least abundant of the three fishes, Coho have the largest abundance peak, and Steelheads appear to have the largest total abundance as well as the most consistent presence throughout the year.
 - Coho and Jack Coho abundances appear to be increasing in time (highest peaks are later years), whereas Steelhead abundances may be decreasing (top peaks are earlier years).
 
-## Annual totals
+## Summary Statistics and Analysis
+```{r}
+tab_3 <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
+  clean_names() %>% 
+  pivot_longer(cols = 3:15, names_to = "species", values_to = "counts")  %>% 
+  mutate(date_new = mdy(date)) %>% 
+  filter(species %in% c("coho", "jack_coho", "steelhead")) %>% 
+  select(species, date_new, counts) %>% 
+  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% 
+  mutate(year = year(date_new)) %>% 
+   mutate(species = case_when(
+    species == "coho" ~ "Coho",
+    species == "jack_coho" ~ "Jack Coho",
+    species == "steelhead" ~ "Steelhead")) %>% 
+  group_by(year, species) %>% 
+  summarise(count = sum(counts))
+
+```
+
+
+```{r, warning = FALSE, message = FALSE, fig.cap="**Figure 2:** Yearly Population Abundance of Coho, Jack Coho, and Steelhead salmon recorded at the Willammette Falls fish passage. Data from: Colombia Basin Research. School of Aquatic & Fishery Science, University of Washington. Date accessed: 2021-01-29. http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+ggplot(data = tab_3,
+       aes(x = year, y = count, color = species)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Annual Fish Count", color = "Species") +
+  scale_x_continuous(breaks=seq(2001,2010,1)) +
+  theme_classic() +
+  scale_color_manual(values = c("#238A8DFF", "95D8F0FF", "#440154FF"))
+```
+
+- The population of Steelhead in the Willammette river fluctuated greatly throughout the ten years of study excepting 2007-2009 where it remained between 19,698 and 18,209 individuals.
+- The population of Jack Coho stayed comparatively stable throughout the years of study, remaining between 402 and 2,971 individuals.
+- Coho population abundance seemed to share similar trends with Jack Coho abundance before spiking between 2008 and 2009. 

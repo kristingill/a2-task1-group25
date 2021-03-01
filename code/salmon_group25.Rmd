@@ -124,7 +124,7 @@ ggplot(data = tab_3,
        aes(x = year, y = count, color = species)) +
   geom_point() +
   geom_line() +
-  labs(x = "Year", y = "Annual Fish Count", color = "Species") +
+  labs(x = "Year", y = "Fish Count", color = "Species") +
   scale_x_continuous(breaks=seq(2001,2010,1)) +
   theme_classic() +
   scale_color_manual(values = c("#238A8DFF", "95D8F0FF", "#440154FF"))

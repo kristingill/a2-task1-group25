@@ -44,6 +44,7 @@ We first examine the full time series (first tab) to look for general trends in 
 
 Columbia Basin Research. DART Adult Passage Daily Counts For All Species for WFF-Willamette Falls. Dates: 2001-01-01 to 2010-12-31. Accessed: 2021-01-29. School of Aquatic & Fishery Sciences, University of Washington. URL: http://www.cbr.washington.edu/dart/query/adult_graph_text 
 
+![Fish Ladder](falls.jpg)
 
 # Data Visualizations {.tabset}
 ## Time Series

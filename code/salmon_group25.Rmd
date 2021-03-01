@@ -47,6 +47,7 @@ Columbia Basin Research. DART Adult Passage Daily Counts For All Species for WFF
 ![Photograph of the Willamette Falls Fish Ladder. Photo credit: Yancy Lind](Willamette_Falls.jpg)
 
 
+
 ![Map of the Willamette Falls Fish Ladder. Photo credit: U.S. Army Corps of Engineers](Willamette_Falls_Locks_area_map.jpg)
 
 # Data Visualizations {.tabset}

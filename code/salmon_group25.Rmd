@@ -90,7 +90,7 @@ fish_passage %>%
   gg_season(y = counts,
             pal = scales::viridis_pal()(9)) +
   facet_wrap("species") +
-  ylab("Fish counts") +
+  ylab("Fish Counts") +
   xlab("Date") +
   theme_classic()
 ```
